@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "artekmed-slangpy-visualizer"
+version = "0.1.0"
+description = "Interactive depth-unprojected pointcloud viewer using SlangPy and slangpy-renderer"
+requires-python = ">=3.10"
+dependencies = [
+    "slangpy>=0.40.1",
+    "slangpy-renderer>=0.1.0",
+    "artekmed-dataset-reader>=0.1.0",
+    "numpy>=1.26.0",
+]
+
+[project.scripts]
+artekmed-visualizer = "artekmed_visualizer.main:main"
