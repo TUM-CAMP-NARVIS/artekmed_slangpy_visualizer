@@ -140,12 +140,13 @@ class DepthCameraView:
     def has_texture(self) -> bool:
         return True
 
-    def extra_args(self, sprite_scale: float) -> dict:
+    def extra_args(self, sprite_scale: float, falloff_exponent: float) -> dict:
         """Build per-camera extra_args dict for surfel rendering."""
         return {
             "color_params": self.color_params,
             "depth_fy": self.depth_fy,
             "sprite_scale": sprite_scale,
+            "falloff_exponent": falloff_exponent,
             "depthWidth": self.depth_width,
             "depthHeight": self.depth_height,
             "useStaticColor": False,
@@ -319,6 +320,12 @@ def main(argv: list[str] | None = None) -> None:
         type=float,
         default=1.5,
         help="Surfel size multiplier (default: 1.5)",
+    )
+    parser.add_argument(
+        "--falloff-exponent",
+        type=float,
+        default=4.0,
+        help="Surfel edge alpha falloff exponent (default: 4.0, higher = sharper edges)",
     )
     parser.add_argument("--width", type=int, default=1280, help="Window width")
     parser.add_argument("--height", type=int, default=720, help="Window height")
@@ -513,7 +520,7 @@ def main(argv: list[str] | None = None) -> None:
                     view_matrix,
                     proj_matrix,
                     cam.model_matrix,
-                    cam.extra_args(args.sprite_scale),
+                    cam.extra_args(args.sprite_scale, args.falloff_exponent),
                 )
 
         device.submit_command_buffer(command_encoder.finish())
